@@ -11,10 +11,10 @@ const schema = Schema(
         birthday: { type: Date },
         phone: { type: String },
         email: { type: String },
-        adress: { type: String },
+        address: { type: String },
         place: { type: String },
-        department: { type: ObjectId },
-        user: { type: ObjectId },
+        department: { type: ObjectId, ref: 'department' },
+        user: { type: ObjectId, ref: 'user' },
         createDate: { type: Date, default: Date.now },
     },
     { versionKey: false }

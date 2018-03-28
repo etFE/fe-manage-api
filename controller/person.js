@@ -1,26 +1,70 @@
 
+const { Person } = require('../model');
+const errors = require('restify-errors');
+
+// 获取人员信息
 const getPersons = async (req, res, next) => {
-    res.send('所有人员');
+    let result;
+    try {
+        result = await Person.find().populate(['user']);
+        res.send({ message: "success", data: result });
+    } catch (error) {
+        return next(error);
+    }
     return next();
 }
 
+// 根据id获取人员信息
 const getPersonById = async (req, res, next) => {
-    res.send('根据id查询人员');
+    const { id } = req.params;
+    let result;
+    try {
+        result = await Person.findById(id);
+        res.send({ message: "success", data: result });
+    } catch (error) {
+        return next(error);
+    }
     return next();
 }
 
+// 新增人员
 const addPerson = async (req, res, next) => {
-    res.send('添加人员信息');
+    const body = req.body;
+    const person = new Person(body);
+    let result;
+    try {
+        result = await person.save();
+        res.send({ message: "success", data: result });
+    } catch (error) {
+        return next(error);
+    }
     return next();
 }
 
+// 根据id修改人员
 const updatePersonById = async (req, res, next) => {
-    res.send('修改人员信息')
+    const { id } = req.params;
+    const body = req.body;
+    let result;
+    try {
+        result = await Person.findByIdAndUpdate(id, body, { new: true });
+        res.send({ message: "success", data: result });
+    } catch (error) {
+        return next(error);
+    }
     return next();
 }
 
+// 根据id删除人员
 const deletePersonById = async (req, res, next) => {
-    res.send('删除人员信息')
+    const { id } = req.params;
+    let result;
+    try {
+        result = await Person.findByIdAndRemove(id);
+        res.send({ message: "success", data: result });
+    } catch (error) {
+        return next(error);
+    }
     return next();
 }
 
