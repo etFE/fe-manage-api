@@ -3,7 +3,7 @@ const path = require('path');
 const errors = require('restify-errors');
 const { File } = require('../model');
 
-// 获取
+// 获取文件信息
 const getFiles = async (req, res, next) => {
     let result;
     try {
@@ -15,7 +15,7 @@ const getFiles = async (req, res, next) => {
     return next();
 }
 
-// 根据id获取
+// 根据id获取文件信息
 const getFileById = async (req, res, next) => {
     const { id } = req.params;
     let result;
@@ -28,7 +28,7 @@ const getFileById = async (req, res, next) => {
     return next();
 }
 
-// 新增
+// 新增一条文件信息
 const addFile = async (req, res, next) => {
     const body = req.body;
     const file = new File(body);
@@ -42,7 +42,7 @@ const addFile = async (req, res, next) => {
     return next();
 }
 
-// 根据id修改
+// 根据id修改文件信息
 const updateFileById = async (req, res, next) => {
     const { id } = req.params;
     const body = req.body;
@@ -80,6 +80,7 @@ const deleteFileById = async (req, res, next) => {
 }
 
 // 上传文件
+// TODO:优化事务处理
 const uploadFile = async (req, res, next) => {
     const { file } = req.files;
     try {
@@ -119,7 +120,6 @@ exports.get = [
 ];
 
 exports.post = [
-    // { path: '/file', system: 'manage', handler: addFile },
     { path: '/file/upload', system: 'manage', handler: uploadFile }
 ];
 
