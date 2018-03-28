@@ -1,0 +1,22 @@
+{
+  "name": "manage-api",
+  "version": "1.0.0",
+  "description": "前端接口管理项目",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app"
+  },
+  "author": "katte",
+  "license": "ISC",
+  "dependencies": {
+    "compression": "^1.7.2",
+    "moment": "^2.21.0",
+    "mongoose": "^5.0.11",
+    "multer": "^1.3.0",
+    "restify": "^7.0.0"
+  },
+  "devDependencies": {
+    "colors": "^1.2.1"
+  }
+}
