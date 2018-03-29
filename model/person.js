@@ -13,6 +13,7 @@ const schema = Schema(
         email: { type: String },
         address: { type: String },
         place: { type: String },
+        avatar: { type: ObjectId, ref: 'file' },
         department: { type: ObjectId, ref: 'department' },
         user: { type: ObjectId, ref: 'user' },
         createDate: { type: Date, default: Date.now },
