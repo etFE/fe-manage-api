@@ -7,7 +7,7 @@ const getPersons = async (req, res, next) => {
     let result;
     try {
         result = await Person.find().populate(['user', 'file']);
-        res.send({ message: "success", data: result });
+        res.send({ message: "get success", data: result });
     } catch (error) {
         return next(error);
     }
