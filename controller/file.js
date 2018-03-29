@@ -90,10 +90,6 @@ const uploadFile = async (req, res, next) => {
         const ext = tmparr[tmparr.length - 1];
         const newfile = `${parseInt(Math.random() * 100)}${Date.parse(new Date()).toString()}.${ext}`;
         const newpath = path.join(`${process.cwd()}/static/upload`, newfile);
-        // 创建一个可写流
-        const stream = fs.createWriteStream(newpath);
-        // // 可读流通过管道写入可写流
-        fs.createReadStream(tmpath).pipe(stream);
 
         const model = new File({
             name,
@@ -102,7 +98,13 @@ const uploadFile = async (req, res, next) => {
             type: ext
         });
         const result = await model.save();
-        res.send(result);
+        if (result) {
+            // 创建一个可写流
+            const stream = fs.createWriteStream(newpath);
+            // // 可读流通过管道写入可写流
+            fs.createReadStream(tmpath).pipe(stream);
+        }
+        res.send({ message: 'success', data: result });
     } catch (error) {
         return next(error);
     }
