@@ -5,7 +5,7 @@ const errors = require('restify-errors');
 const getRoles = async (req, res, next) => {
     let result;
     try {
-        result = await Role.find({}, { _id: 0 }).populate(['system', 'menus']);
+        result = await Role.find().populate(['system', 'menus']);
         res.send({ message: 'success', data: result });
     } catch (error) {
         return next(error);
