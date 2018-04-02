@@ -75,5 +75,6 @@ server.on("restifyError", (req, res, err, next) => {
 
 // 监听项目
 server.listen(3000, () => {
+    console.log(process.env.NODE_ENV);
     console.log("%s listening at %s", server.name, server.url);
 });

@@ -54,6 +54,20 @@ const updateMenuById = async (req, res, next) => {
     return next();
 }
 
+// 根据id设置系统
+const updateSystemById = async (req, res, next) => {
+    const { id } = req.params;
+    const body = req.body;
+    let result;
+    try {
+        result = await Menu.findByIdAndUpdate(id, body, { new: true });
+        res.send({ message: 'success', data: result });
+    } catch (error) {
+        return next(error);
+    }
+    return next();
+}
+
 // 根据id删除
 const deleteMenuById = async (req, res, next) => {
     const { id } = req.params;
@@ -69,25 +83,37 @@ const deleteMenuById = async (req, res, next) => {
 
 // 根据系统获取菜单
 // TODO: 查询待优化
-const getMenuBySystem = async (req, res, next) => {
-    const { sys } = req.params;
+// const getMenuBySystem = async (req, res, next) => {
+//     const { sys } = req.params;
+//     let result;
+//     try {
+//         const system = await System.findOne({ name: sys });
+//         const role = await Role.find({ system }, { 'menus': 1, "_id": 0 });
+//         const menus = role.map(v => v.menus);
+//         const result = await Menu.find({
+//             _id: {
+//                 '$in': menus.join(',').split(',')
+//             }
+//         });
+//         res.send({ message: 'success', data: result });
+//     } catch (error) {
+//         return next(error);
+//     }
+//     return next();
+// }
+
+// 根据系统id获取
+const getMenuBySystemId = async (req, res, next) => {
+    const { sysId } = req.params;
     let result;
     try {
-        const system = await System.findOne({ name: sys });
-        const role = await Role.find({ system }, { 'menus': 1, "_id": 0 });
-        const menus = role.map(v => v.menus);
-        const result = await Menu.find({
-            _id: {
-                '$in': menus.join(',').split(',')
-            }
-        });
+        result = await Menu.find({ system: sysId });
         res.send({ message: 'success', data: result });
     } catch (error) {
         return next(error);
     }
     return next();
 }
-
 
 /**
  * 对外接口
@@ -97,7 +123,7 @@ const getMenuBySystem = async (req, res, next) => {
 exports.get = [
     { path: '/menu', system: 'manage', handler: getMenus },
     { path: '/menu/:id', system: 'manage', handler: getMenuById },
-    { path: '/systemMenu/:sys', system: 'manage', handler: getMenuBySystem }
+    { path: '/system_menu/:sysId', system: 'manage', handler: getMenuBySystemId },
 ];
 
 exports.post = [
@@ -106,6 +132,7 @@ exports.post = [
 
 exports.put = [
     { path: '/menu/:id', system: 'manage', handler: updateMenuById },
+    { path: '/menu/:id/setSystem', system: 'manage', handler: updateSystemById },
 ];
 
 exports.del = [

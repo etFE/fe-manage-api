@@ -1,0 +1,8 @@
+{
+    "dev":{
+        "dbconnect":"mongodb://localhost:27017/ef_manage_test"
+    },
+    "prod":{
+        "dbconnect":"mongodb://localhost:27017/ef_manage"
+    }
+}
