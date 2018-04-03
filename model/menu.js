@@ -6,8 +6,9 @@ const ObjectId = Schema.Types.ObjectId;
 const schema = Schema(
     {
         name: { type: String, required: true, unique: true },
-        file: [{ type: ObjectId, ref: 'file' }],
-        descript: String,
+        text: { type: String },
+        files: [{ type: ObjectId, ref: 'file' }],
+        descript: { type: String },
         system: { type: ObjectId, ref: 'system' },
         createDate: { type: Date, default: Date.now },
     },

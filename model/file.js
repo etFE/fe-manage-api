@@ -7,6 +7,7 @@ const schema = Schema(
     {
         name: { type: String, required: true, unique: true },
         path: { type: String, required: true },
+        height: { type: Number },
         expireDate: { type: Date },
         enable: { type: Number, default: 0 },
         descript: String,

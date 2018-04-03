@@ -115,6 +115,38 @@ const getMenuBySystemId = async (req, res, next) => {
     return next();
 }
 
+// 获取组件项目菜单
+const pluginMenu = async (req, res, next) => {
+    let result;
+    try {
+        const system = await System.findOne({ name: 'plugin' });
+        result = await Menu.find({ system: system });
+        result = result.map(v => ({ id: v.name, text: `${v.name} ${v.text}` }));
+        res.send({ message: 'success', data: result });
+    } catch (error) {
+        return next(error);
+    }
+    return next();
+}
+
+// 设置菜单包含文件
+const setMenuFileById = async (req, res, next) => {
+    const { id } = req.params;
+    const { files } = req.body;
+    let result;
+    try {
+        const result = await Menu.findByIdAndUpdate(id, {
+            "$addToSet": {
+                "files": { '$each': files }
+            }
+        }, { new: true });
+        res.send({ message: 'success', data: result });
+    } catch (error) {
+        return next(error);
+    }
+    return next();
+}
+
 /**
  * 对外接口
  * 格式：
@@ -124,6 +156,7 @@ exports.get = [
     { path: '/menu', system: 'manage', handler: getMenus },
     { path: '/menu/:id', system: 'manage', handler: getMenuById },
     { path: '/system_menu/:sysId', system: 'manage', handler: getMenuBySystemId },
+    { path: '/menu', system: 'plugin', handler: pluginMenu }
 ];
 
 exports.post = [
@@ -133,6 +166,7 @@ exports.post = [
 exports.put = [
     { path: '/menu/:id', system: 'manage', handler: updateMenuById },
     { path: '/menu/:id/setSystem', system: 'manage', handler: updateSystemById },
+    { path: '/menu/:id/setFile', system: 'manage', handler: setMenuFileById }
 ];
 
 exports.del = [

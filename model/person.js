@@ -20,7 +20,10 @@ const schema = Schema(
     },
     { versionKey: false }
 );
-
+// schema.virtual('age').get(() => {
+//     return this.birthday
+// });
+// schema.set('toJSON', { getters: true });
 const Person = mongoose.model('person', schema, 'Person');
 
 module.exports = Person;

@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const errors = require('restify-errors');
-const { File } = require('../model');
+const { File, Menu } = require('../model');
 
 // 获取文件信息
 const getFiles = async (req, res, next) => {
@@ -21,6 +21,26 @@ const getFileById = async (req, res, next) => {
     let result;
     try {
         result = await File.findById(id);
+        res.send({ message: 'success', data: result });
+    } catch (error) {
+        return next(error);
+    }
+    return next();
+}
+
+// 根据组件名称获取demo
+const pluginMenuDemo = async (req, res, next) => {
+    const { plugin } = req.params;
+    let result;
+    try {
+        const menu = await Menu.findOne({ name: plugin }).populate(['files']);
+        const demo = menu.files.map(v => ({ url: v.path, height: v.height }));
+        const result = {
+            title: `${menu.name} ${menu.text}`,
+            description: menu.descript,
+            demo: demo,
+            api: ""
+        };
         res.send({ message: 'success', data: result });
     } catch (error) {
         return next(error);
@@ -118,15 +138,17 @@ const uploadFile = async (req, res, next) => {
  */
 exports.get = [
     { path: '/file', system: 'manage', handler: getFiles },
-    { path: '/file/:id', system: 'manage', handler: getFileById }
+    { path: '/file/:id', system: 'manage', handler: getFileById },
+    { path: '/demo/:plugin', system: 'plugin', handler: pluginMenuDemo }
 ];
 
 exports.post = [
-    { path: '/file/upload', system: 'manage', handler: uploadFile }
+    { path: '/file/upload', system: 'manage', handler: uploadFile },
+    { path: '/file', system: 'manage', handler: addFile }
 ];
 
 exports.put = [
-    { path: '/file/:id', system: 'manage', handler: updateFileById },
+    { path: '/file/:id/setMenu', system: 'manage', handler: updateFileById },
 ];
 
 exports.del = [
