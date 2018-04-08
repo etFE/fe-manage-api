@@ -69,9 +69,10 @@ server.on('after', (req, res, next) => {
 
 // 错误处理
 server.on("restifyError", (req, res, err, next) => {
-    const { message, name } = new errors.bunyanSerializer(err);
-    res.status(err.statusCode);
-    res.send({ message, name });
+    const obj = new errors.bunyanSerializer(err);
+
+    res.status(err.statusCode || 500);
+    res.send({ message: obj.message, name: obj.name });
 });
 
 // 监听项目
