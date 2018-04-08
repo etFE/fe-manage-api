@@ -33,13 +33,13 @@ const pluginMenuDemo = async (req, res, next) => {
     const { plugin } = req.params;
     let result;
     try {
-        const menu = await Menu.findOne({ name: plugin }).populate(['files']);
+        const menu = await Menu.findOne({ name: plugin }).populate(['files', 'api']);
         const demo = menu.files.map(v => ({ url: v.path, height: v.height }));
         const result = {
             title: `${menu.name} ${menu.text}`,
             description: menu.descript,
             demo: demo,
-            api: ""
+            api: menu.api ? menu.api.markdown : ''
         };
         res.send({ message: 'success', data: result });
     } catch (error) {

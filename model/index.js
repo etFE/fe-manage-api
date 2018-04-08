@@ -15,3 +15,4 @@ module.exports.Role = require('./role');
 module.exports.Person = require('./person');
 module.exports.Log = require('./log');
 module.exports.File = require('./file');
+module.exports.Api = require('./api');

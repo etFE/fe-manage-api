@@ -5,7 +5,7 @@ const errors = require('restify-errors');
 const getMenus = async (req, res, next) => {
     let result;
     try {
-        result = await Menu.find();
+        result = await Menu.find().populate(['system']);
         res.send({ message: 'success', data: result });
     } catch (error) {
         return next(error);

@@ -9,6 +9,7 @@ const schema = Schema(
         text: { type: String },
         files: [{ type: ObjectId, ref: 'file' }],
         descript: { type: String },
+        api: { type: ObjectId, ref: 'api' },
         system: { type: ObjectId, ref: 'system' },
         createDate: { type: Date, default: Date.now },
     },

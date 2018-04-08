@@ -70,11 +70,12 @@ server.on('after', (req, res, next) => {
 // 错误处理
 server.on("restifyError", (req, res, err, next) => {
     const { message, name } = new errors.bunyanSerializer(err);
+    res.status(err.statusCode);
     res.send({ message, name });
 });
 
 // 监听项目
 server.listen(3000, () => {
-    console.log(process.env.NODE_ENV);
+    // console.log(process.env.NODE_ENV);
     console.log("%s listening at %s", server.name, server.url);
 });
