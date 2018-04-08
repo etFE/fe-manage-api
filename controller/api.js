@@ -33,13 +33,44 @@ const addApi = async (req, res, next) => {
 }
 
 // 根据id修改
-const updateLogById = async (req, res, next) => {
+const updateApiById = async (req, res, next) => {
+    const { id } = req.params;
+    const body = req.body;
+    let result;
+    try {
+        result = await Api.findByIdAndUpdate(id, body, { new: true });
+        res.send({ message: 'success', data: result });
+    } catch (error) {
+        return next(error);
+    }
+    return next();
+}
 
+// 根据name修改
+const updateApiByName = async (req, res, next) => {
+    const { name } = req.params;
+    const body = req.body;
+    let result;
+    try {
+        result = await Api.findOneAndUpdate({ name: name }, body, { new: true });
+        res.send({ message: 'success', data: result });
+    } catch (error) {
+        next(error);
+    }
+    return next();
 }
 
 // 根据id删除
-const deleteLogById = async (req, res, next) => {
-
+const deleteApiById = async (req, res, next) => {
+    const { id } = req.params;
+    let result;
+    try {
+        result = await Api.findByIdAndRemove(id);
+        res.send({ message: 'success', data: result });
+    } catch (error) {
+        return next(error);
+    }
+    return next();
 }
 
 /**
@@ -57,9 +88,10 @@ exports.post = [
 ];
 
 exports.put = [
-    // { path: '/log/:id', system: 'manage', handler: updateLogById },
+    { path: '/api/:id', system: 'manage', handler: updateApiById },
+    { path: '/api/:name/update', system: 'manage', handler: updateApiByName }
 ];
 
 exports.del = [
-    // { path: '/log/:id', system: 'manage', handler: deleteLogById },
+    { path: '/api/:id', system: 'manage', handler: deleteApiById },
 ];
