@@ -32,7 +32,8 @@ const addRole = async (req, res, next) => {
     const role = new Role(body);
     let result;
     try {
-        result = await role.save();
+        const newRole = await role.save();
+        result = await Role.findById(newRole).populate(['system']);
         res.send({ message: 'success', data: result });
     } catch (error) {
         return next(error);
