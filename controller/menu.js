@@ -32,7 +32,9 @@ const addMenu = async (req, res, next) => {
     const menu = new Menu(body);
     let result;
     try {
-        result = await menu.save();
+        const newMenu = await menu.save();
+        result = await Menu.findById(newMenu).populate(['system']);
+        // result = await Menu.save(body).populate(['system']);
         res.send({ message: 'success', data: result });
     } catch (error) {
         return next(error);
