@@ -14,8 +14,16 @@ const getApis = async (req, res, next) => {
 }
 
 // 根据id获取
-const getLogById = async (req, res, next) => {
-
+const getApiById = async (req, res, next) => {
+    const { id } = req.params;
+    let result;
+    try {
+        result = await Api.findById(id);
+        res.send({ message: 'success', data: result });
+    } catch (error) {
+        return next(error);
+    }
+    return next();
 }
 
 // 新增
@@ -80,7 +88,7 @@ const deleteApiById = async (req, res, next) => {
  */
 exports.get = [
     { path: '/api', system: 'manage', handler: getApis },
-    // { path: '/log/:id', system: 'manage', handler: getLogById }
+    { path: '/api/:id', system: 'manage', handler: getApiById }
 ];
 
 exports.post = [
