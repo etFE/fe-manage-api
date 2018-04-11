@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const moment = require('moment');
 const Schema = mongoose.Schema;
 const ObjectId = Schema.Types.ObjectId;
 
@@ -10,10 +11,16 @@ const schema = Schema(
         password: { type: String, default: '123456' },
         descript: String,
         roles: [{ type: ObjectId, ref: 'role' }],
-        createDate: { type: Date, default: Date.now },
+        createDate: {
+            type: Date,
+            default: Date.now,
+            get: v => moment(v).format('YYYY-MM-DD HH:mm'),
+        },
     },
     { versionKey: false }
 );
+
+schema.set('toJSON', { getters: true })
 
 const User = mongoose.model('user', schema, 'User');
 

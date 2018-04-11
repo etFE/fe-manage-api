@@ -85,6 +85,21 @@ const deleteUserById = async (req, res, next) => {
     return next();
 }
 
+const login = async (req, res, next) => {
+    const { body } = req
+    let result
+    try {
+        result = await User.find(body).populate('roles');
+        if (result.length === 0) {
+            res.send({ message: '账号或密码错误', error: true, data: result });
+        } else {
+            res.send({ message: '登录成功', data: result });
+        }
+    } catch (error) {
+        return next(error)
+    }
+    return next()
+}
 
 /**
  * 对外接口
@@ -98,6 +113,7 @@ exports.get = [
 
 exports.post = [
     { path: '/user', system: 'manage', handler: addUser },
+    { path: '/user/login', system: 'manage', handler: login },
 ];
 
 exports.put = [

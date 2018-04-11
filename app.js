@@ -33,7 +33,8 @@ server.use(restify.plugins.queryParser());
 server.use(restify.plugins.bodyParser());
 
 // 匹配路由前执行
-server.pre((req, res, next) => {
+server.use((req, res, next) => {
+    console.log('pre', req, res)
     return next();
 });
 
