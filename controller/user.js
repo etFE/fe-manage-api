@@ -1,4 +1,5 @@
 const { User } = require('../model');
+const { generateToken } = require('../common/pem')
 const errors = require('restify-errors');
 
 // 获取
@@ -85,16 +86,35 @@ const deleteUserById = async (req, res, next) => {
     return next();
 }
 
+// 登录
 const login = async (req, res, next) => {
     const { body } = req
+    const token = generateToken(body)
     let result
     try {
         result = await User.find(body).populate('roles');
         if (result.length === 0) {
             res.send({ message: '账号或密码错误', error: true, data: result });
         } else {
-            res.send({ message: '登录成功', data: result });
+            res.send({ message: '登录成功', data: result, token });
         }
+    } catch (error) {
+        return next(error)
+    }
+    return next()
+}
+
+// 已登录用户信息获取
+const getUserInfo = async (req, res, next) => {
+
+    try {
+        const result = {
+            nick: 'cl',
+            username: 'admin',
+            password: 'admin123',
+            avatar: 'http://on0m38azq.bkt.clouddn.com/17-10-18/63768488.jpg',
+        }
+        res.send({ message: 'success', data: result });
     } catch (error) {
         return next(error)
     }
@@ -108,6 +128,7 @@ const login = async (req, res, next) => {
  */
 exports.get = [
     { path: '/user', system: 'manage', handler: getUsers },
+    { path: '/user/info', system: 'manage', handler: getUserInfo },
     { path: '/user/:id', system: 'manage', handler: getUserById }
 ];
 

@@ -4,6 +4,8 @@ const compression = require('compression');
 const router = require('./router');
 const moment = require('moment');
 const colors = require('colors'); //控制台打印颜色
+const { verifyToken } = require('./common/pem')
+
 moment.locale('zh-cn'); // moment 中文
 
 // 服务创建
@@ -34,7 +36,19 @@ server.use(restify.plugins.bodyParser());
 
 // 匹配路由前执行
 server.use((req, res, next) => {
-    console.log('pre', req, res)
+    const { method, headers, url } = req
+
+    if (method !== 'OPTIONS' && method !== 'GET' && url !== '/manage/user/login') {
+        if (headers.Authorization) {
+            const token = headers.Authorization.split(' ')[1]
+            const result = verifyToken(token)
+
+            if (result) {
+                return next();
+            }
+        }
+        res.send({ message: '没有操作权限', error: true, data: {} });
+    }
     return next();
 });
 
