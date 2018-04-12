@@ -8,6 +8,31 @@ const schema = Schema(
         name: { type: String, required: true, unique: true },
         descript: String,
         markdown: String,
+        props: [
+            {
+                name: { type: String },
+                descript: { type: String },
+                "type": { type: String },
+                "default": { type: String },
+                show: { type: Boolean, default: true }
+            }
+        ],
+        events:[
+            {
+                name: { type: String },
+                descript: { type: String },
+                "params": { type: String },
+                show: { type: Boolean, default: true }
+            }
+        ],
+        methods:[
+            {
+                name: { type: String },
+                descript: { type: String },
+                "params": { type: String },
+                show: { type: Boolean, default: true }
+            }
+        ],
         createDate: { type: Date, default: Date.now },
     },
     { versionKey: false }

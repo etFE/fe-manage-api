@@ -46,7 +46,9 @@ const updateApiById = async (req, res, next) => {
     const body = req.body;
     let result;
     try {
-        result = await Api.findByIdAndUpdate(id, body, { new: true });
+        result = await Api.findByIdAndUpdate(id, {
+            "$set": body
+        }, { new: true });
         res.send({ message: 'success', data: result });
     } catch (error) {
         return next(error);
