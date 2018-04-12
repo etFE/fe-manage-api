@@ -45,11 +45,21 @@ const getApiById = async (req, res, next) => {
 
 // 新增
 const addApi = async (req, res, next) => {
-    const body = req.body;
-    const api = new Api(body);
+    const { menuId } = req.body;
     let result;
     try {
-        result = await api.save();
+        // 查询菜单
+        const menu = await Menu.findById(menuId); 
+        // 根据菜单信息 创建api
+        const api = new Api({
+            name: menu.name,
+            descript: menu.descript
+        });
+        await api.save();
+        // 将api的id回写回菜单
+        menu.api = api.id;
+        result = await menu.save();
+        // menu.save()
         res.send({ message: 'success', data: result });
     } catch (error) {
         return next(error);
