@@ -2,6 +2,7 @@ const restify = require('restify');
 const corsMiddleware = require('restify-cors-middleware');
 const compression = require('compression');
 
+const { verifyToken } = require('./common/pem')
 const { buildError, buildLog } = require('./common/track');
 const router = require('./router');
 
@@ -16,7 +17,8 @@ server.use(compression());
 
 // 跨域
 const cors = corsMiddleware({
-    origins: ['*']
+    origins: ['*'],
+    allowHeaders: ['authorization'],
 });
 server.pre(cors.preflight);
 server.use(cors.actual);
@@ -28,18 +30,24 @@ server.use(restify.plugins.bodyParser());
 server.use((req, res, next) => {
     const { method, headers, url } = req
 
-    if (method !== 'OPTIONS' && method !== 'GET' && url !== '/manage/user/login') {
-        if (headers.Authorization) {
-            const token = headers.Authorization.split(' ')[1]
+    if (method !== 'OPTIONS' &&
+        url.indexOf('/manage') !== -1 &&
+        url !== '/manage/user/login'
+    ) {
+        if (headers.authorization) {
+            const token = headers.authorization.split(' ')[1]
             const result = verifyToken(token)
 
             if (result) {
+                console.log('result', result)
                 return next();
             }
         }
-        res.send({ message: '没有操作权限', error: true, data: {} });
+        res.send({ message: 'success', error: '没有操作权限', data: {} });
+    } else {
+        console.log('next')
+        return next();
     }
-    return next();
 });
 
 // 获取上传的静态资源

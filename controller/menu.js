@@ -158,7 +158,7 @@ exports.get = [
     { path: '/menu', system: 'manage', handler: getMenus },
     { path: '/menu/:id', system: 'manage', handler: getMenuById },
     { path: '/system_menu/:sysId', system: 'manage', handler: getMenuBySystemId },
-    { path: '/menu', system: 'plugin', handler: pluginMenu }
+    { path: '/menu', system: 'front', handler: pluginMenu }
 ];
 
 exports.post = [

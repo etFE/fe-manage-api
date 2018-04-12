@@ -94,7 +94,7 @@ const login = async (req, res, next) => {
     try {
         result = await User.find(body).populate('roles');
         if (result.length === 0) {
-            res.send({ message: '账号或密码错误', error: true, data: result });
+            res.send({ message: 'success', error: '账号或密码错误', data: result });
         } else {
             res.send({ message: '登录成功', data: result, token });
         }

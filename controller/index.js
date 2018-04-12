@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const basename = path.basename(module.filename);
 const system = {
-    plugin: 'plugin',
+    front: 'front',
     manage: 'manage',
     application:'application'
 }

@@ -139,7 +139,7 @@ const uploadFile = async (req, res, next) => {
 exports.get = [
     { path: '/file', system: 'manage', handler: getFiles },
     { path: '/file/:id', system: 'manage', handler: getFileById },
-    { path: '/demo/:plugin', system: 'plugin', handler: pluginMenuDemo }
+    { path: '/demo/:plugin', system: 'front', handler: pluginMenuDemo }
 ];
 
 exports.post = [
