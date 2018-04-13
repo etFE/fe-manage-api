@@ -9,6 +9,8 @@ const schema = Schema(
     {
         username: { type: String, required: true, unique: true },
         password: { type: String, default: '123456' },
+        nick: { type: String },
+        avater: String,
         descript: String,
         roles: [{ type: ObjectId, ref: 'role' }],
         createDate: {
@@ -25,5 +27,3 @@ schema.set('toJSON', { getters: true })
 const User = mongoose.model('user', schema, 'User');
 
 module.exports = User;
-
-

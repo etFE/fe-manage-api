@@ -26,6 +26,8 @@ server.use(cors.actual);
 server.use(restify.plugins.queryParser());
 server.use(restify.plugins.bodyParser());
 
+server.pre(restify.plugins.pre.context());
+
 // 匹配路由前执行
 server.use((req, res, next) => {
     const { method, headers, url } = req
@@ -38,8 +40,8 @@ server.use((req, res, next) => {
             const token = headers.authorization.split(' ')[1]
             const result = verifyToken(token)
 
-            if (result) {
-                console.log('result', result)
+            if (result.username) {
+                req.set('currentUser', result.username)
                 return next();
             }
         }

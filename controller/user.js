@@ -30,6 +30,8 @@ const getUserById = async (req, res, next) => {
 // 新建
 const addUser = async (req, res, next) => {
     const body = req.body;
+    body.nick = body.nick || body.username
+
     const user = new User(body);
     let result;
     try {
@@ -89,7 +91,7 @@ const deleteUserById = async (req, res, next) => {
 // 登录
 const login = async (req, res, next) => {
     const { body } = req
-    const token = generateToken(body)
+    const token = generateToken({ username: body.username })
     let result
     try {
         result = await User.find(body).populate('roles');
@@ -106,14 +108,11 @@ const login = async (req, res, next) => {
 
 // 已登录用户信息获取
 const getUserInfo = async (req, res, next) => {
+    const currentUser = req.get('currentUser')
 
     try {
-        const result = {
-            nick: 'cl',
-            username: 'admin',
-            password: 'admin123',
-            avatar: 'http://on0m38azq.bkt.clouddn.com/17-10-18/63768488.jpg',
-        }
+        const result = await User.find({ username: currentUser })
+
         res.send({ message: 'success', data: result });
     } catch (error) {
         return next(error)
