@@ -94,7 +94,7 @@ const login = async (req, res, next) => {
     const token = generateToken({ username: body.username })
     let result
     try {
-        result = await User.find(body).populate('roles');
+        result = await User.findOne(body).populate('roles');
         if (result.length === 0) {
             res.send({ message: 'success', error: '账号或密码错误', data: result });
         } else {
@@ -111,7 +111,7 @@ const getUserInfo = async (req, res, next) => {
     const currentUser = req.get('currentUser')
 
     try {
-        const result = await User.find({ username: currentUser })
+        const result = await User.findOne({ username: currentUser })
 
         res.send({ message: 'success', data: result });
     } catch (error) {
