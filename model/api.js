@@ -37,6 +37,7 @@ const schema = Schema(
     },
     { versionKey: false }
 );
+schema.set('toJSON', { getters: true });
 
 const Api = mongoose.model('api', schema, 'Api');
 

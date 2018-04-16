@@ -16,6 +16,8 @@ const schema = Schema(
     { versionKey: false }
 );
 
+schema.set('toJSON', { getters: true });
+
 const Menu = mongoose.model('menu', schema, 'Menu');
 
 module.exports = Menu;

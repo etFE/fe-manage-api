@@ -22,7 +22,7 @@ const schema = Schema(
     { versionKey: false }
 );
 
-schema.set('toJSON', { getters: true })
+schema.set('toJSON', { getters: true });
 
 const User = mongoose.model('user', schema, 'User');
 

@@ -14,6 +14,8 @@ const schema = Schema(
     { versionKey: false }
 );
 
+schema.set('toJSON', { getters: true });
+
 const Role = mongoose.model('role', schema, 'Role');
 
 module.exports = Role;
