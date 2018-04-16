@@ -14,6 +14,8 @@ const schema = Schema(
     { versionKey: false }
 );
 
+schema.set('toJSON', { getters: true });
+
 const Log = mongoose.model('log', schema, 'Log');
 
 module.exports = Log;

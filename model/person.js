@@ -31,8 +31,10 @@ schema.virtual('age').get(function () {
 schema.virtual('sexStr').get(function () {
     const _sex = this.sex;
     return _sex === 0 ? '男' : _sex === 1 ? '女' : '未填写';
-})
+});
+
 schema.set('toJSON', { getters: true });
+
 const Person = mongoose.model('person', schema, 'Person');
 
 module.exports = Person;

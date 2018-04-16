@@ -12,6 +12,8 @@ const schema = Schema(
     { versionKey: false }
 );
 
+schema.set('toJSON', { getters: true });
+
 const System = mongoose.model('system', schema, 'System');
 
 module.exports = System;

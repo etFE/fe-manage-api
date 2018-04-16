@@ -17,6 +17,8 @@ const schema = Schema(
     { versionKey: false }
 );
 
+schema.set('toJSON', { getters: true });
+
 const File = mongoose.model('file', schema, 'File');
 
 module.exports = File;
