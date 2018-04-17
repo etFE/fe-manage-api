@@ -3,9 +3,17 @@ const errors = require('restify-errors');
 
 // 获取
 const getRoles = async (req, res, next) => {
+    // 查询条件
+    const { name, system } = req.query;
+    const query = {};
+    if (name)
+        query.name = { '$regex': name };
+    if (system)
+        query.system = system;
+
     let result;
     try {
-        result = await Role.find().populate(['system', 'menus']);
+        result = await Role.find(query).populate(['system']);
         res.send({ message: 'success', data: result });
     } catch (error) {
         return next(error);
@@ -47,7 +55,7 @@ const updateRoleById = async (req, res, next) => {
     const body = req.body;
     let result;
     try {
-        result = await Role.findByIdAndUpdate(id, body, { new: true });
+        result = await Role.findByIdAndUpdate(id, body, { new: true }).populate(['system']);
         res.send({ message: 'success', data: result });
     } catch (error) {
         return next(error);
@@ -62,10 +70,8 @@ const setRoleMenuById = async (req, res, next) => {
     let result;
     try {
         const result = await Role.findByIdAndUpdate(id, {
-            "$addToSet": {
-                "menus": { '$each': menus }
-            }
-        }, { new: true });
+            "$set": { menus }
+        }, { new: true }).populate(['system']);
         res.send({ message: 'success', data: result });
     } catch (error) {
         return next(error);
