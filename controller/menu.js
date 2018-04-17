@@ -3,9 +3,17 @@ const errors = require('restify-errors');
 
 // 获取
 const getMenus = async (req, res, next) => {
+    // 查询条件
+    const { name, system } = req.query;
+    const query = {};
+    if (name)
+        query.name = { '$regex': name };
+    if (system)
+        query.system = system;
+
     let result;
     try {
-        result = await Menu.find().populate(['system']);
+        result = await Menu.find(query).populate(['system']);
         res.send({ message: 'success', data: result });
     } catch (error) {
         return next(error);
@@ -48,7 +56,7 @@ const updateMenuById = async (req, res, next) => {
     const body = req.body;
     let result;
     try {
-        result = await Menu.findByIdAndUpdate(id, body, { new: true });
+        result = await Menu.findByIdAndUpdate(id, body, { new: true }).populate(['system']);
         res.send({ message: 'success', data: result });
     } catch (error) {
         return next(error);
