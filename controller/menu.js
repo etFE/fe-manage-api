@@ -1,6 +1,6 @@
-const { Menu, System, Role } = require('../model');
+const { Menu, System, Role, User } = require('../model');
 const errors = require('restify-errors');
-
+const _ = require('lodash');
 // 获取
 const getMenus = async (req, res, next) => {
     // 查询条件
@@ -34,6 +34,27 @@ const getMenuById = async (req, res, next) => {
     return next();
 }
 
+const getUserMenu = async (req, res, next) => {
+    const username = req.get('currentUser');
+    let result;
+    try {
+        result = await User.findOne({ username }, { roles: 1 })
+            .populate({
+                path: 'roles',
+                populate: {
+                    path: 'menus'
+                }
+            });
+        result = _.map(result.roles, 'menus');
+        result = _.flattenDeep(result);
+        result = _.uniqBy(result, 'name').map(v => v.name);
+        res.send({ message: 'success', data: result })
+    } catch (error) {
+        return next(error);
+    }
+    return next();
+}
+
 // 添加
 const addMenu = async (req, res, next) => {
     const body = req.body;
@@ -42,7 +63,6 @@ const addMenu = async (req, res, next) => {
     try {
         const newMenu = await menu.save();
         result = await Menu.findById(newMenu).populate(['system']);
-        // result = await Menu.save(body).populate(['system']);
         res.send({ message: 'success', data: result });
     } catch (error) {
         return next(error);
@@ -164,6 +184,7 @@ const setMenuFileById = async (req, res, next) => {
  */
 exports.get = [
     { path: '/menu', system: 'manage', handler: getMenus },
+    { path: '/user_menu', system: 'manage', handler: getUserMenu },
     { path: '/menu/:id', system: 'manage', handler: getMenuById },
     { path: '/system_menu/:sysId', system: 'manage', handler: getMenuBySystemId },
     { path: '/menu', system: 'front', handler: pluginMenu }
