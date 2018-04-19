@@ -4,9 +4,17 @@ const errors = require('restify-errors');
 
 // 获取
 const getUsers = async (req, res, next) => {
+    // 查询条件
+    const query = {};
+    const { username, nick } = req.query;
+    if (username)
+        query.username = { '$regex': username };
+    if (nick)
+        query.nick = { '$regex': nick };
+
     let result;
     try {
-        result = await User.find().populate('roles');
+        result = await User.find(query);
         res.send({ message: 'success', data: result });
     } catch (error) {
         return next(error);
@@ -64,9 +72,7 @@ const setUserRoleById = async (req, res, next) => {
     let result;
     try {
         const result = await User.findByIdAndUpdate(id, {
-            "$addToSet": {
-                "roles": { '$each': roles }
-            }
+            "$set": { roles }
         }, { new: true });
         res.send({ message: 'success', data: result });
     } catch (error) {
@@ -138,6 +144,7 @@ exports.post = [
 
 exports.put = [
     { path: '/user/:id', system: 'manage', handler: updateUserById },
+    { path: '/user/:id/setRole', system: 'manage', handler: setUserRoleById },
 ];
 
 exports.del = [

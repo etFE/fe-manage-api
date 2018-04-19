@@ -16,6 +16,10 @@ const schema = Schema(
     { versionKey: false }
 );
 
+schema.virtual('systemId').get(function () {
+    return this.system._id || this.system;
+});
+
 schema.set('toJSON', { getters: true });
 
 const Menu = mongoose.model('menu', schema, 'Menu');

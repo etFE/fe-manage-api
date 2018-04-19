@@ -37,17 +37,21 @@ server.use((req, res, next) => {
         url !== '/manage/user/login'
     ) {
         if (headers.authorization) {
-            const token = headers.authorization.split(' ')[1]
-            const result = verifyToken(token)
-
-            if (result.username) {
-                req.set('currentUser', result.username)
-                return next();
+            const token = headers.authorization.split(' ')[1];
+            try {
+                const result = verifyToken(token);
+                if (result.username) {
+                    req.set('currentUser', result.username);
+                    return next();
+                }
+            } catch (error) {
+                next(error);
             }
+
         }
         res.send({ message: 'success', error: '没有操作权限', data: {} });
     } else {
-        console.log('next')
+        console.log('next');
         return next();
     }
 });
