@@ -17,7 +17,7 @@ const schema = Schema(
                 show: { type: Boolean, default: true }
             }
         ],
-        events:[
+        events: [
             {
                 name: { type: String },
                 descript: { type: String },
@@ -25,7 +25,7 @@ const schema = Schema(
                 show: { type: Boolean, default: true }
             }
         ],
-        methods:[
+        methods: [
             {
                 name: { type: String },
                 descript: { type: String },
@@ -33,7 +33,11 @@ const schema = Schema(
                 show: { type: Boolean, default: true }
             }
         ],
-        createDate: { type: Date, default: Date.now },
+        createDate: {
+            type: Date,
+            default: Date.now,
+            get: v => moment(v).format('YYYY-MM-DD HH:mm'),
+        },
     },
     { versionKey: false }
 );

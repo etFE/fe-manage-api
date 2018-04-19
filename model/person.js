@@ -17,7 +17,11 @@ const schema = Schema(
         avatar: { type: ObjectId, ref: 'file' },
         department: { type: ObjectId, ref: 'department' },
         user: { type: ObjectId, ref: 'user' },
-        createDate: { type: Date, default: Date.now },
+        createDate: {
+            type: Date,
+            default: Date.now,
+            get: v => moment(v).format('YYYY-MM-DD HH:mm'),
+        },
     },
     { versionKey: false }
 );
