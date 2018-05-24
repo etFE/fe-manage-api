@@ -39,7 +39,7 @@ const pluginMenuDemo = async (req, res, next) => {
             title: `${menu.name} ${menu.text}`,
             description: menu.descript,
             demo: demo,
-            api: menu.api ? menu.api.markdown : ''
+            api: menu.api ? menu.api : '',
         };
         res.send({ message: 'success', data: result });
     } catch (error) {

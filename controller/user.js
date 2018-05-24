@@ -101,7 +101,7 @@ const login = async (req, res, next) => {
     let result
     try {
         result = await User.findOne(body).populate('roles');
-        if (result.length === 0) {
+        if (!result || result.length === 0) {
             res.send({ message: 'success', error: '账号或密码错误', data: result });
         } else {
             res.send({ message: '登录成功', data: result, token });

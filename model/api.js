@@ -23,6 +23,7 @@ const schema = Schema(
                 name: { type: String },
                 descript: { type: String },
                 "params": { type: String },
+                "back": { type: String },
                 show: { type: Boolean, default: true }
             }
         ],
@@ -31,6 +32,7 @@ const schema = Schema(
                 name: { type: String },
                 descript: { type: String },
                 "params": { type: String },
+                "back": { type: String },
                 show: { type: Boolean, default: true }
             }
         ],
